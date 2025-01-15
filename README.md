@@ -1,2 +1,2 @@
 # Medium__blog
-craeting blogging  website in serverless function 
+creating blogging  website on serverless function 
