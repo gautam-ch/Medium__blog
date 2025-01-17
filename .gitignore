@@ -7,7 +7,7 @@ package-lock.json
 .worker/
 dist/
 output/
-wrangler.toml
+
 
 # Prisma
 prisma/dev.db
