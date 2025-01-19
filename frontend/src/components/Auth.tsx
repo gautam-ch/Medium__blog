@@ -23,7 +23,7 @@ export function Auth({type}:{type:'signin' | 'signup'}){
 
          localStorage.setItem('token',jwt);
 
-         navigate('/blog');
+         navigate('/blogs');
         }
         catch(err:any){
             console.log({error:'error in sending post request',details:err.message});
