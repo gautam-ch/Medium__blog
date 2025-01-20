@@ -1,5 +1,6 @@
 import { AppBar } from "../components/AppBar";
 import { BlogCard } from "../components/BlogCard";
+import {BlogSkeleton} from "../components/BlogSkelton";
 import { useBlogs } from "../hooks";
 
 
@@ -10,16 +11,16 @@ export function Blog(){
           if(loading){
             return (
                 <div>
-                    loading...
+                    <BlogSkeleton/>
                 </div>
             )
           }
 
 
     return (
-        <div className="w-screen h-full bg-[#FAF5E6] ">  
+        <div className="w-screen h-full bg-[#f7f6f1] ">  
                   
-                  <div className="mb-4">
+                  <div className="mb-4 ">
                         <AppBar/>       
                   </div>
 

@@ -17,7 +17,7 @@ export function FullBlog({title,name,content,publishedDate}:Propstype){
     return (
         <div>
         <AppBar/>
-        <div className="h-screen flex justify-center items-center">
+        <div className=" mt-[4rem] h-full flex justify-center items-center">
         <div className=" w-full grid grid-cols-12 mx-20">
                     
                     <div className="col-span-8">

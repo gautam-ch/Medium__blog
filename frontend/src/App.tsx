@@ -3,6 +3,7 @@ import { Signup } from "./pages/signup"
 import { Signin } from "./pages/signin"
 import { Blog } from "./pages/blogs"
 import { BlogId } from "./pages/blogId"
+import { CreateBlog } from "./pages/CreateBlog"
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                <Route path="/signin" element={<Signin/>}/>
                <Route path="/blogs" element={<Blog/>}/>
                <Route path='/blog/:id' element={<BlogId/>}/>
+               <Route path='/blog/post' element={<CreateBlog/>}/>
           </Routes>
         </BrowserRouter>
        

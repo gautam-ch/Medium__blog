@@ -51,19 +51,21 @@ export function BlogCard({authorName , title,content, publishedDate,id}:BlogProp
 }
 
 
-export function Avator({name,size}:{name:string,size:number}){
-        
-    const  arr=name.split(" ");
-    const  initial =arr[0].toUpperCase();
-    let surname="";
-    if(arr.length>=2){
-           surname=arr[1].toUpperCase();
-    }
+    export function Avator({name,size}:{name:string,size:number}){
+            
+        const  arr=name.split(" ");
+        const  initial =arr[0].toUpperCase();
+        let surname="";
+        if(arr.length>=2){
+            surname=arr[1].toUpperCase();
+        }
 
-    return (
-         <div className={`bg-slate-300  w-[${size}rem] h-[${size}rem]  rounded-full font-semibold text-${size==2?'sm':'lg'} 
-         flex justify-center items-center border-2 border-solid border-slate-500`}>
-               {initial[0]}{surname[0]}
-         </div>
-    )
-}
+        return (
+            <div className="w-full h-full">
+            <div style={ {width:`${size}rem`, height:`${size}rem` } } className={`bg-slate-300  rounded-full font-semibold text-${size==2?'sm':'lg'} 
+            flex justify-center items-center border-2 border-solid border-slate-500`}>
+                {initial[0]}{surname[0]}
+            </div>
+            </div>
+        )
+    }

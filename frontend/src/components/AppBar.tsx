@@ -16,7 +16,7 @@ export function AppBar(){
 
                   <div className="flex  items-center  gap-8">
                           <div className="  font-mono hover:underline text-xl">
-                         <Link to='/blog'>write</Link>
+                         <Link to='/blog/post'>write</Link>
                          </div>
                           <div className="  font-mono hover:underline text-xl"> 
                          <Link to='/signin'>sign-in</Link>

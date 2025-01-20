@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useBlogId } from "../hooks";
 import { FullBlog } from "../components/FullBlog";
+import FullBlogSkeleton from "../components/BlogSkelton";
 
 
 
@@ -15,7 +16,7 @@ export function BlogId(){
         if(loading){
             return (
                 <div>
-                    loading...
+                   <FullBlogSkeleton/>
                 </div>
             )
         }
