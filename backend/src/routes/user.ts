@@ -134,7 +134,7 @@ User.post('/signin', async (c) => {
         console.log('payload :', payload);
         const token = await Jwt.sign(payload, secret_key);
 
-        return c.json({ message: "Login Successful", token: token }, 200);
+        return c.json({ message: "Login Successful", jwt: token }, 200);
     }
     catch (err) {
 

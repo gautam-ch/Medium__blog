@@ -21,7 +21,18 @@ Blog.get('/blog', async (c) => {
     try {
         const prisma = c.get('prisma');
 
-        const posts = await prisma.post.findMany();
+        const posts = await prisma.post.findMany({
+            select:{
+                title:true,
+                content:true,
+                id:true,
+                author:{
+                       select:{
+                        name:true
+                       }
+                }
+            }
+        })           
 
         return c.json({ posts: posts }, 200);
     }
@@ -52,11 +63,14 @@ Blog.post('/blog', auth, async (c) => {
                 title,
                 content,
                 authorId: id
+            },
+            select:{
+                id:true
             }
         })
         console.log('Creating blog', res);
 
-        return c.json({ message: "Successfully created blog" }, 200);
+        return c.json({ message: "Successfully created blog" ,post:res}, 200);
     }
     catch (err) {
         console.log({ Error: 'error in creating blog', err }, 401)
@@ -78,6 +92,16 @@ Blog.get('/blog/:id', auth, async (c) => {
         const posts = await prisma.post.findFirst({
             where: {
                 id
+            },
+            select:{
+                title:true,
+                content:true,
+                id:true,
+                author:{
+                       select:{
+                        name:true
+                       }
+                }
             }
         });
         if (!posts) {
