@@ -1,14 +1,28 @@
-import { ChangeEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Link, replace, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../config";
 import { SignupInput } from "@gautamrishi/medium-common";
 import axios from "axios";
+import { Button } from "./Button";
 
 
 
 export function Auth({type}:{type:'signin' | 'signup'}){
-
+         
+    
     const navigate=useNavigate();
+    
+    const istoken=localStorage.getItem('token');
+    //  console.log(istoken);
+
+    
+        useEffect(()=>{
+            if(istoken){
+            navigate('/blogs');
+            }
+        },[])
+       
+   
           
     const [postInput,setPostInput]=useState<SignupInput>({
         name:"",
@@ -22,11 +36,15 @@ export function Auth({type}:{type:'signin' | 'signup'}){
          const jwt = res.data.jwt;
 
          localStorage.setItem('token',jwt);
-
-         navigate('/blogs');
+            
+         navigate('/blogs',{replace:true});
+         return res;
         }
         catch(err:any){
-            console.log({error:'error in sending post request',details:err.message});
+            if (axios.isAxiosError(err)) {
+                console.log('Response data in sendRequest:', err.response?.data);
+            }
+            throw err;
         }
 
     }
@@ -58,14 +76,9 @@ export function Auth({type}:{type:'signin' | 'signup'}){
                     </div>
 
                      <div className="mt-8">
-                                  
-                                <button className="w-[24rem] h-8 bg-black text-white rounded-md"
-                                  onClick={sendRequest}
-                                >{type==='signup'?'Sign Up':'Sign In'}</button>
+                       <Button label={type==='signup'?'Sign Up':'Sign In'} onClick={sendRequest}></Button>
                      </div>
                  
-
-
           </div>
         </div>
     )

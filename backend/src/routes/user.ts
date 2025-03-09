@@ -1,9 +1,10 @@
-import { Hono } from 'hono';
+import { Context, Hono } from 'hono';
 import bcrypt from 'bcryptjs';
 import { Jwt } from 'hono/utils/jwt';
 import { prisma } from '../middleware/prisma';
 import { PrismaClient } from '@prisma/client';
 import { signupInput,signinInput } from '@gautamrishi/medium-common';
+import { auth } from '../middleware/auth';
 
 
 const User = new Hono<{
@@ -48,7 +49,7 @@ const verify_pass = async (plain_pass: string, hashed_pass: string) => {
 }
 
 User.post('/signup', async (c) => {
-
+         console.log('reached singin');
     try {
 
         const prisma = c.get('prisma');
@@ -57,13 +58,12 @@ User.post('/signup', async (c) => {
         const validate = signupInput.safeParse(body);
 
         if (!validate.success) {
-
-            return c.json({ error: 'Invaild input format', details: validate.error }, 400);
+            console.log("Validation failed, returning:", { error: 'Invalid email or Password too short (min 6)' });
+            return c.json({ error: 'Invalid email or Password too short (min 6)'}, 400);
         }
         console.log(body);
 
-        //hit the database
-
+    
         const existing_user = await prisma.user.findFirst({
             where: {
                 email: body.email
@@ -73,7 +73,7 @@ User.post('/signup', async (c) => {
 
 
         if (existing_user) {
-            return c.json({ error: "Username or email already taken" }, 409);
+            return c.json({ error: "Email already taken" }, 409);
         }
 
         const hash_pass = await hashpassword(body.password);
@@ -106,8 +106,8 @@ User.post('/signin', async (c) => {
         const validate = signinInput.safeParse(body);
 
         if (!validate.success) {
-
-            return c.json({ error: 'Invaild input format', details: validate.error }, 400);
+            console.log("Validation failed, returning:", { error: 'Invalid email or Password too short (min 6)' });
+            return c.json({ error: 'Invalid email or Password too short (min 6)'}, 400);
         }
 
         const prisma = c.get('prisma');
@@ -119,7 +119,7 @@ User.post('/signin', async (c) => {
         })
 
         if (!user_detail) {
-            return c.json({ error: 'User not found' }, 404)
+            return c.json({ error: 'User is not registered' }, 404)
         }
 
         const verify = await verify_pass(body.password, user_detail.password);
@@ -140,6 +140,25 @@ User.post('/signin', async (c) => {
 
         return c.json({ error: 'Error in sigin ', err }, 400);
     }
+})
+
+User.get('/profile',auth,async(c:any)=>{
+       
+    const prisma = c.get('prisma');
+        
+    const id=c.get('userId');
+    console.log(id);
+    const res= await prisma.user.findFirst({
+        where:{
+            id
+        },
+        select:{
+            email:true,
+            name:true
+        }
+    })
+
+    return c.json(res,200);
 })
 
 export default User;

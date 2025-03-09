@@ -1,18 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../config";
-
-
-
-
-
-
+import { useNavigate } from "react-router-dom";
 
 export function useBlogId(id:string){
     const [loading,setLoading] = useState(true);
-      const [blog,setBlog] = useState({});
-
-
+       const [blog,setBlog] = useState({});
+         const navigate=useNavigate();
+  
        useEffect(()=>{
              const call=async()=>{
                 try{
@@ -27,6 +22,12 @@ export function useBlogId(id:string){
                 
                 }
                 catch(err:any){
+                  console.log(err.response.status);
+                        if(err.response.status==401){
+                              console.log('unauthorized user');
+
+                              navigate('/signin',{replace:true});
+                        }
                     console.log({error :'error in fetching blogs',details:err.message})
                 }
 

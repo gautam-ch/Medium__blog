@@ -28,7 +28,7 @@ export const auth =async(c:Context,next:Next)=>{
                  await next();
    }
    catch(error:any){
-            return c.json({error:"Error in authorization process ",details:error.message},401);
+            return c.json({error:"User is unauthorized   ",details:error.message},401);
    }
 
 }

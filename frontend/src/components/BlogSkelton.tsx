@@ -2,7 +2,7 @@
 
 export const BlogSkeleton = () => {
   return (
-    <div className="w-screen h-full bg-[#f7f6f1]">
+    <div className="w-screen h-full bg-[#f7f6f1] mb-[4rem]">
       
       <div className="mb-4 bg-white shadow-sm">
         <div className="h-14 w-full flex items-center justify-between px-4">
@@ -13,7 +13,7 @@ export const BlogSkeleton = () => {
 
    
       {[1, 2, 3].map((index) => (
-        <div key={index} className="p-1 flex justify-center items-center">
+        <div key={index} className="p-1 flex justify-center items-center mt-20">
           <div className="max-w-xl w-full border-b border-slate-400">
            
             <div className="flex items-center">
@@ -62,7 +62,7 @@ export const FullBlogSkeleton = () => {
           </div>
         </div>
   
-        <div className="mt-[4rem] h-full flex justify-center items-center">
+        <div className="mt-[10rem] h-full flex justify-center items-center">
           <div className="w-full grid grid-cols-12 mx-20">
           
             <div className="col-span-8">
