@@ -23,7 +23,7 @@ export function BlogId(){
     
     return (
         <div>
-            <FullBlog title={blog.title} content={blog.content} name={blog.author.name} publishedDate='2nd February 2024'></FullBlog>
+            <FullBlog title={blog.title} content={blog.content} name={blog.author.name} publishedDate={blog.createdAt} imageUrl={blog.imageUrl} ></FullBlog>
         </div>
     )
 }

@@ -5,6 +5,7 @@ import { Blog } from "./pages/blogs"
 import { BlogId } from "./pages/blogId"
 import { CreateBlog } from "./pages/CreateBlog"
 import { Toaster } from "react-hot-toast"
+import './App.css'
 
 function App() {
           

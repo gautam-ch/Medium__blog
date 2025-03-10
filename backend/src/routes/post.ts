@@ -49,19 +49,20 @@ Blog.post('/blog', auth, async (c) => {
 
         const body = await c.req.json();
 
-        const validate = createBlog.safeParse(body);
+        // const validate = createBlog.safeParse(body);
 
-        if (!validate.success) {
+        // if (!validate.success) {
 
-            return c.json({ error: 'Invaild input format', details: validate.error }, 400);
-        }
+        //     return c.json({ error: 'Invaild input format', details: validate.error }, 400);
+        // }
            
-        const {title,content} = body;
+        const {title,content,imageUrl} = body;
         const id = c.get('userId');
         const res = await prisma.post.create({
             data: {
                 title,
                 content,
+                imageUrl,
                 authorId: id
             },
             select:{
@@ -97,6 +98,8 @@ Blog.get('/blog/:id', auth, async (c) => {
                 title:true,
                 content:true,
                 id:true,
+                createdAt:true,
+                imageUrl:true,
                 author:{
                        select:{
                         name:true
