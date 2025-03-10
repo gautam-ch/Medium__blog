@@ -10,10 +10,12 @@ import FullBlogSkeleton from "../components/BlogSkelton";
 export function BlogId(){
       
     const {id}=useParams();
-                     console.log(id); 
-        const {blog,loading}:any=useBlogId(id|| 'none');
-             
-        if(loading){
+                    //  console.log(id); 
+        const {data,isPending}:any=useBlogId(id|| 'none');
+              
+          console.log('tanstack',data,isPending);      
+
+        if(isPending){
             return (
                 <div>
                    <FullBlogSkeleton/>
@@ -23,7 +25,7 @@ export function BlogId(){
     
     return (
         <div>
-            <FullBlog title={blog.title} content={blog.content} name={blog.author.name} publishedDate={blog.createdAt} imageUrl={blog.imageUrl} ></FullBlog>
+            <FullBlog title={data.title} content={data.content} name={data.author.name} publishedDate={data.createdAt} imageUrl={data.imageUrl} ></FullBlog>
         </div>
     )
 }

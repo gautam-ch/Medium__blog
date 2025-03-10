@@ -3,74 +3,23 @@ import { AppBar } from "../components/AppBar";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient,useMutation } from "@tanstack/react-query";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import {BiSolidImageAdd} from "react-icons/bi";
 import { modules } from "../utils/quillmodule";
 import '../App.css';
 
-
 export function CreateBlog(){
     const [title,setTitle] =     useState('');
     const [content,setContent] = useState('');
     const [image,setImage] =     useState<string | null>(null);
-    
-    const  quillRef = useRef<ReactQuill | null>(null);  
-    const navigate=useNavigate();
+     
+    const queryClient = useQueryClient();
 
-    const  handleDynamicImage=async()=>{
-           
-           const input =  document.createElement('input');
-
-           input.type='file';
-           input.accept='image/*';
-           input.click();
-
-           input.onchange=async()=>{
-                const file=input.files?.[0];
-
-                if(!file){
-                    return ;
-                }
-                 const data = new FormData();
-
-                 data.append('file',file);
-                 data.append('upload_preset','thechoicer');
-
-                 try{
-
-                    const res = await axios.post('https://api.cloudinary.com/v1_1/dvcaabqlm/image/upload',data);
-
-                    const imageUrl=res.data.secure_url;
-
-                    //  insert image at edior
-                    
-                    if(!quillRef.current){
-                        return ;
-                    }
-                    const  editor = quillRef.current.getEditor();
-                    
-                    
-                    const cursor_position=editor.getSelection()?.index ?? 0;
-                    if(!cursor_position){
-                        return;
-                    }
-                    editor.insertEmbed(cursor_position,'image',imageUrl);
-               
-              }
-              catch(error:any){
-                   console.log({error:"error while adding image in quill"},error.message);
-              }
-
-
-
-           }
-    }
-
-    
-    const  handlebutton=async()=>{
-
-                    try{  
+      const mutation=useMutation({
+          mutationFn:async()=>{
+                      try{  
                         const res = await axios.post(`${BACKEND_URL}/api/v1/post/blog`,{
                                     title,
                                     content,
@@ -80,21 +29,71 @@ export function CreateBlog(){
                                             Authorization:`Bearer ${localStorage.getItem('token')}`
                                         }
                                     })
-                                    console.log(res); 
-                                
+                                    // console.log(res); 
                                 navigate(`/blog/${res.data.post.id}`);    
-
-
                     }catch(err:any){
+                          if(err.response.status==401){
+                            console.log('unauthorized User');
+                              navigate('/signin',{replace:true});
+                          }
                         console.log({error:'error in creating blog',details:err.message});
                     }
 
+          },
+          onSuccess:()=>{
+            queryClient.invalidateQueries({queryKey:['AllBlogs']})
           }
+      })
+
+    const  quillRef = useRef<ReactQuill | null>(null);  
+    const navigate=useNavigate();
+
+    const  handleDynamicImage=async()=>{         
+           const input =  document.createElement('input');
+           input.type='file';
+           input.accept='image/*';
+           input.click();
+
+           input.onchange=async()=>{
+                const file=input.files?.[0]
+                if(!file){
+                    return ;
+                }
+                 const data = new FormData();
+
+                 data.append('file',file);
+                 data.append('upload_preset','thechoicer');
+
+                 try{
+                    const res = await axios.post('https://api.cloudinary.com/v1_1/dvcaabqlm/image/upload',data);
+                    const imageUrl=res.data.secure_url;
+                    //  insert image at edior
+                    if(!quillRef.current){
+                        return ;
+                    }
+                    const  editor = quillRef.current.getEditor();
+        
+                    const cursor_position=editor.getSelection()?.index ?? 0;
+                    if(!cursor_position){
+                        return;
+                    }
+                    editor.insertEmbed(cursor_position,'image',imageUrl);    
+              }
+              catch(error:any){
+                   console.log({error:"error while adding image in quill"},error.message);
+              }
+           }
+    }
+
+    
+    const  handlebutton=async(event:React.MouseEvent<HTMLButtonElement>)=>{
+                event.preventDefault();
+                   mutation.mutate();
+    }
   
        const handleImage=async(event:React.ChangeEvent<HTMLInputElement>)=>{
                 
                const file = event.target.files?.[0];
-
                if(!file){
                       alert('please upload cover image');
                       return ;
@@ -103,28 +102,27 @@ export function CreateBlog(){
 
                data.append('file',file);
                data.append('upload_preset',"thechoicer");
-
-
                try{
                     const res = await axios.post('https://api.cloudinary.com/v1_1/dvcaabqlm/image/upload',data);
 
-                    console.log('upload res',res);
-
+                    // console.log('upload res',res);
                     setImage(res.data.secure_url);
                }
                catch(error:any){
                     console.log({error:'Image upload failed',details:error.message})
-               }     
-              
+               }          
        }
-          
-
+        
     return (   <div className="w-full h-screen">
                 <AppBar/>
                   
                 <div className="w-full flex justify-center -ml-10">
-                <div>        
-
+                <div>    
+                     {
+                        mutation.isError?
+                        (<div className="0text-2xl"> <p> Error in creating blog</p></div>)
+                    :(
+                    <>
                       <label className=" cursor-pointer mt-[2rem] w-[60rem] h-48  border border-gray-300 overflow-hidden  bg-gray-200 flex items-center justify-center rounded-md">
                            <input type="file" accept="image/*" onChange={handleImage} className="hidden" />
                            {(image)? 
@@ -154,9 +152,11 @@ export function CreateBlog(){
                               Publish post
                        </button>
                        </div>
+                    
+                       </>)
+                     }  
+                     </div>
                 </div>  
-                </div>  
-                       
         </div>
     )
 }

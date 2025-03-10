@@ -6,9 +6,9 @@ import { useBlogs } from "../hooks";
 
 
 export function Blog(){
-          const {blogs,loading}= useBlogs();
+          const {data,isPending}= useBlogs();
 
-          if(loading){
+          if(isPending){
             return (
                 <div>
                     <BlogSkeleton/>
@@ -16,7 +16,7 @@ export function Blog(){
             )
           }
           
-         
+          console.log('tanstack',data,isPending);   
 
     return (
         <div className="w-screen h-full bg-[#f7f6f1] ">  
@@ -28,8 +28,8 @@ export function Blog(){
                   <div className="w-full flex justify-center">
                     <div>
                         {
-                            blogs.map((blog:any)=>(
-                                <BlogCard id={blog.id} authorName={blog.author.name} title={blog.title} content={blog.content} publishedDate={blog.createdAt} imageUrl={blog.imageUrl}/>
+                            data.map((blog:any,index:number)=>(
+                                <BlogCard key={index} id={blog.id} authorName={blog.author.name} title={blog.title} content={blog.content} publishedDate={blog.createdAt} imageUrl={blog.imageUrl}/>
                             ))
                         }
                    </div>

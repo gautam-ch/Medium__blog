@@ -42,7 +42,7 @@ export function BlogCard({authorName , title,content, publishedDate,id,imageUrl}
                                                 <div className="text-xl font-bold">
                                                     {title}
                                                 </div>
-                                                <div className="mt-2 text-slate-500 text-sm w-[80%]">
+                                                <div className="mt-2 text-slate-500 text-sm w-[80%] overflow-hidden">
                                                     <Safequillrender content={content.slice(0,200)}/>
                                                 </div>
                                 </div>
@@ -55,9 +55,9 @@ export function BlogCard({authorName , title,content, publishedDate,id,imageUrl}
                           </div> 
                          
                          <div className="grid-span-2">
-                                         <div className="w-40 h-40 flex items-center">
+                                         <div className="w-40 h-30 flex items-center mt-10">
                                               <img src={imageUrl || "https://www.blogtyrant.com/wp-content/uploads/2019/07/draft-a-post.jpg"} 
-                                              alt="Cover Image"  className="object-cover"/>
+                                              alt="Cover Image"  className="w-full h-full object-cover"/>
                                         </div>
                          </div>
                     </div>   

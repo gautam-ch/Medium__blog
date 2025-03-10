@@ -1,97 +1,75 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 
+import { useQuery } from "@tanstack/react-query";
+
+
 export function useBlogId(id:string){
-    const [loading,setLoading] = useState(true);
-       const [blog,setBlog] = useState({});
-         const navigate=useNavigate();
-  
-       useEffect(()=>{
-             const call=async()=>{
-                try{
-                  const blog=await axios.get(`${BACKEND_URL}/api/v1/post/blog/${id}`,{
-                    headers:{
-                        Authorization:`Bearer ${localStorage.getItem('token')}`
-                    }
-                  });
-                    console.log('Blog:',blog);
-                  setBlog(blog.data.Posts);
-                  setLoading(false);
-                
-                }
-                catch(err:any){
-                  console.log(err.response.status);
-                        if(err.response.status==401){
-                              console.log('unauthorized user');
+     const navigate=useNavigate();
+     
+       const query = useQuery({
+         queryKey:['BlogById',id],
+         queryFn:async()=>{
+                  
+          try{
+            const blog=await axios.get(`${BACKEND_URL}/api/v1/post/blog/${id}`,{
+              headers:{
+                  Authorization:`Bearer ${localStorage.getItem('token')}`
+              }
+            });
+             return blog.data.Posts;
+          
+          }
+          catch(err:any){
+            console.log(err.response.status);
+                  if(err.response.status==401){
+                        console.log('unauthorized user');
 
-                              navigate('/signin',{replace:true});
-                        }
-                    console.log({error :'error in fetching blogs',details:err.message})
-                }
+                        navigate('/signin',{replace:true});
+                  }
+              console.log({error :'error in fetching blogs',details:err.message})
+          }
+         }
+       })
 
-             }
-             
-           call();
-       },[id])
-
-      
-
-
-
-
-
-    return (
-        {
-            loading,
-            blog
-        }
-    )
-
+        const {isPending,data}=query;
+         return{
+             data,
+             isPending
+         }
 }
 
 
 
 export function useBlogs(){
 
-    const [loading,setLoading] = useState(true);
-    const [blogs,setBlogs] = useState([]);
-
-
-       useEffect(()=>{
-             const call=async()=>{
-                try{
-                  const blog=await axios.get(`${BACKEND_URL}/api/v1/post/blog`,{
-                    headers:{
-                        Authorization:localStorage.getItem('token')
+     const query = useQuery({
+          queryKey:['AllBlogs'],
+          queryFn:async()=>{
+                    try{
+                      const blog=await axios.get(`${BACKEND_URL}/api/v1/post/blog`,{
+                        headers:{
+                            Authorization:localStorage.getItem('token')
+                        }
+                      });
+                      
+                      // console.log(blog.data.posts);
+                      return(blog.data.posts);
+                      
                     }
-                  });
-                   
-                  // console.log(blog.data.posts);
-                  setBlogs(blog.data.posts);
-                  setLoading(false);
-                
-                }
-                catch(err:any){
-                    console.log({error :'error in fetching blogs',details:err.message})
-                }
+                    catch(err:any){
+                        console.log({error :'error in fetching blogs',details:err.message})
+                    }
+          }
+     });
 
-             }
-             
-           call();
-       },[])
-
-      
-
-
-
-
-
+  
+        const {isPending,data}=query;
     return (
         {
-            loading,
-            blogs
+            isPending,
+            data
         }
     )
 
