@@ -15,7 +15,8 @@ export function Blog(){
                 </div>
             )
           }
-
+          
+         
 
     return (
         <div className="w-screen h-full bg-[#f7f6f1] ">  
@@ -24,12 +25,14 @@ export function Blog(){
                         <AppBar/>       
                   </div>
 
-                  <div>
-                   {
-                    blogs.map((blog:any)=>(
-                        <BlogCard id={blog.id} authorName={blog.author.name} title={blog.title} content={blog.content} publishedDate="2nd feb 2024"/>
-                    ))
-                   }
+                  <div className="w-full flex justify-center">
+                    <div>
+                        {
+                            blogs.map((blog:any)=>(
+                                <BlogCard id={blog.id} authorName={blog.author.name} title={blog.title} content={blog.content} publishedDate={blog.createdAt} imageUrl={blog.imageUrl}/>
+                            ))
+                        }
+                   </div>
                    </div> 
                   
                 

@@ -28,7 +28,7 @@ export function FullBlog({title,name,content,publishedDate,imageUrl}:Propstype){
  
                     <div className="col-span-8">
                                 
-                                <div className="w-full">
+                                <div className="w-[80%]">
                                     <img src={imageUrl} alt="coverImage" className="object-cover"/>
                                 </div>
                                 <div className="text-4xl font-bold w-[80%] mt-8 ">
@@ -37,7 +37,7 @@ export function FullBlog({title,name,content,publishedDate,imageUrl}:Propstype){
                                 <div className=" text-md text-slate-400 font-mono mt-2">
                                   posted on {publishedDate}
                                 </div>
-                                <div className="my-8 ">
+                                <div className="my-8 text-xl">
                                     <Safequillrender content={content} />
                                 </div>
                                

@@ -68,7 +68,7 @@ export function useBlogs(){
                     }
                   });
                    
-                  console.log(blog.data.posts);
+                  // console.log(blog.data.posts);
                   setBlogs(blog.data.posts);
                   setLoading(false);
                 

@@ -25,6 +25,8 @@ Blog.get('/blog', async (c) => {
             select:{
                 title:true,
                 content:true,
+                createdAt:true,
+                imageUrl:true,
                 id:true,
                 author:{
                        select:{

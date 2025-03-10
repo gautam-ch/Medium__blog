@@ -1,51 +1,70 @@
 import { Link } from "react-router-dom"
+import { Safequillrender } from "./Safequillrender";
+
 interface BlogProps{
     id:string,
     authorName:string,
     title:string,
     content:string,
-    publishedDate:string
+    publishedDate:string,
+    imageUrl:string
 }
 
 
-export function BlogCard({authorName , title,content, publishedDate,id}:BlogProps){
+export function BlogCard({authorName , title,content, publishedDate,id,imageUrl}:BlogProps){
+
+     const date = new Date(publishedDate);
+     publishedDate = date.toDateString();
+     const  minread=(Math.ceil(content.length/100));
 
     return ( 
         <Link to={`/blog/${id}`}>
-    
-         <div className="p-1 flex justify-center items-center">         
-               <div className="max-w-xl border-b  border-slate-400 cursor-pointer">
-                     <div className="flex items-center">
-                               
-                                <div>
-                                     <Avator size={2} name={authorName}/>
-                                </div>         
-                                <div className="ml-4 text-slate-600 text-sm">
-                                    {`${authorName} .`}
+           
+         <div className="p-6 flex justify-center items-center">         
+               <div className="max-w-3xl border-b  border-slate-400 cursor-pointer grid-cols-6">
+                    
+                    <div className="w-full flex gap-10">
+                        <div className="grid-span-4">
+                                <div className="flex items-center">
+                                        
+                                            <div>
+                                                <Avator size={2} name={authorName}/>
+                                            </div>         
+                                            <div className="ml-4 text-slate-600 text-sm">
+                                                {`${authorName} .`}
+                                            </div>
+                                            <div className="ml-2 text-slate-400 ">
+                                                {publishedDate}
+                                            </div>
                                 </div>
-                                <div className="ml-2 text-slate-400 ">
-                                    {publishedDate}
+                                        
+                                 <div className="mt-2">
+                                                <div className="text-xl font-bold">
+                                                    {title}
+                                                </div>
+                                                <div className="mt-2 text-slate-500 text-sm w-[80%]">
+                                                    <Safequillrender content={content.slice(0,200)}/>
+                                                </div>
                                 </div>
-                     </div>
-                            
-                            <div className="mt-2">
-                                    <div className="text-lg font-bold">
-                                        {title}
-                                    </div>
-                                    <div className="mt-2 text-slate-500 text-sm">
-                                        {`${content.slice(0,200)}...`}
-                                    </div>
-                           </div>
-                            
-                            <div className="mt-1 mb-2">
-                                <span className="text-slate-500   border-2 border-slate-200 text-center text-[10px] p-1">
-                                    {`${Math.ceil(content.length/100)} min read`}
-                                </span>
-                           </div>
-
+                                        
+                                 <div className="mt-1 mb-6">
+                                            <span className="text-slate-500   border-2 border-slate-200 text-center text-[10px] p-1">
+                                                {`${minread>140?(120):minread} min read`}
+                                            </span>
+                                </div>
+                          </div> 
+                         
+                         <div className="grid-span-2">
+                                         <div className="w-40 h-40 flex items-center">
+                                              <img src={imageUrl || "https://www.blogtyrant.com/wp-content/uploads/2019/07/draft-a-post.jpg"} 
+                                              alt="Cover Image"  className="object-cover"/>
+                                        </div>
+                         </div>
+                    </div>   
+                   </div>      
+               </div>
+           
     
-          </div>      
-    </div>
     </Link>
     )
 }
