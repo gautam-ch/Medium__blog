@@ -21,11 +21,11 @@ export function Blog(){
     return (
         <div className="w-screen h-full bg-[#f7f6f1] ">  
                   
-                  <div className="mb-4 ">
+                  <div className=" fixed top-0 left-0  w-full h-16 z-40 ">
                         <AppBar/>       
                   </div>
 
-                  <div className="w-full flex justify-center">
+                  <div className="w-full flex justify-center pt-24  ">
                     <div>
                         {
                             data.map((blog:any,index:number)=>(

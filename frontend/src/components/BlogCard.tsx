@@ -43,7 +43,7 @@ export function BlogCard({authorName , title,content, publishedDate,id,imageUrl}
                                                     {title}
                                                 </div>
                                                 <div className="mt-2 text-slate-500 text-sm w-[80%] overflow-hidden">
-                                                    <Safequillrender content={content.slice(0,200)}/>
+                                                    <Safequillrender content={`${content.slice(0,200)}...`}/>
                                                 </div>
                                 </div>
                                         
@@ -81,7 +81,7 @@ export function BlogCard({authorName , title,content, publishedDate,id,imageUrl}
 
         return (
             <div className="w-full h-full">
-            <div style={ {width:`${size}rem`, height:`${size}rem` } } className={`bg-slate-300  rounded-full font-semibold text-${size==2?'sm':'lg'} 
+            <div style={ {width:`${size}rem`, height:`${size}rem` } } className={`bg-slate-300 hover:bg-slate-500  hover:border-slate-600   rounded-full font-semibold text-${size==2?'sm':'lg'} 
             flex justify-center items-center border-2 border-solid border-slate-500`}>
                 {initial[0]}{surname[0]}
             </div>
