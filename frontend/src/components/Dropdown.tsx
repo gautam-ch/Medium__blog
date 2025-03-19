@@ -21,7 +21,7 @@ export function Dropdown({name}:{name:string}){
                          </button>
                          
                        {open && (
-                            <div className="w-48 h-38  absolute right-0 z-10 bg-[#f6f5f4] border  rounded-md shadow-md ">
+                            <div className="w-48 h-38  absolute right-0 z-10 bg-[#ffffff] border  rounded-md shadow-md ">
 
                             <button onClick={()=>{ navigate('/myposts')} }
                              className="block w-full px-6 py-3 text-left font-semibold hover:bg-gray-200"> 📝 My Posts</button>

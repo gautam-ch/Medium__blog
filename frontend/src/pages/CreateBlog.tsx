@@ -2,7 +2,7 @@ import {  useRef, useState } from "react";
 import { AppBar } from "../components/AppBar";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient,useMutation } from "@tanstack/react-query";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -11,15 +11,44 @@ import { modules } from "../utils/quillmodule";
 import '../App.css';
 
 export function CreateBlog(){
-    const [title,setTitle] =     useState('');
-    const [content,setContent] = useState('');
-    const [image,setImage] =     useState<string | null>(null);
+    const location = useLocation();
+
+      console.log('state prop: ',location?.state);
+
+    const [title,setTitle] =     useState(location?.state?.title || "");
+    const [content,setContent] = useState(location?.state?.content || "");
+    const [image,setImage] =     useState<string | null>(location?.state?.imageUrl || null);
      
     const queryClient = useQueryClient();
 
       const mutation=useMutation({
           mutationFn:async()=>{
-                      try{  
+
+              if(location?.state){
+                        const id=location.state.blogId;
+                      try{ 
+                              const res = await axios.put(`${BACKEND_URL}/api/v1/post/blog?id=${id}`,{
+                                  title,
+                                  content,
+                                  imageUrl:image,
+                              },{
+                                headers:{
+                                  Authorization:`Bearer ${localStorage.getItem('token')}`
+                                }
+                              }
+                            )
+                            // console.log(res.data);
+                            navigate(`/blog/${res.data.id}`);  
+                      }
+                      catch(err:any){
+                        console.log({error:'error in updating blog',details:err.message});
+                      }
+
+              }
+              else{
+
+                  try{  
+
                         const res = await axios.post(`${BACKEND_URL}/api/v1/post/blog`,{
                                     title,
                                     content,
@@ -38,10 +67,11 @@ export function CreateBlog(){
                           }
                         console.log({error:'error in creating blog',details:err.message});
                     }
+                  }
 
           },
           onSuccess:()=>{
-            queryClient.invalidateQueries({queryKey:['AllBlogs']})
+            queryClient.invalidateQueries({queryKey:['AllBlogs','myposts']})
           }
       })
 
@@ -138,13 +168,13 @@ export function CreateBlog(){
                            )}
                       </label>
                         <div  className="mt-[2rem]">
-                            <input type='text' placeholder="Title"  onChange={(e)=>{setTitle(e.target.value)} }
-                            className="w-[60rem] h-10 pl-2 border-2 border-slate-300 rounded-md 
+                            <input type='text' placeholder="Title" value={title} onChange={(e)=>{setTitle(e.target.value)} }
+                            className="w-[60rem] h-10 pl-2 border-2 border-slate-300 rounded-md bg-[#fffefa] 
                             outline-none focus:ring-2 focus:ring-blue-300 font-mono" />
                         </div> 
 
                         <div className="mt-8 relative flex flex-col">
-                               <ReactQuill modules={modules} ref={quillRef} value={content} onChange={setContent}  className="w-[60rem] h-[20rem] "/>
+                               <ReactQuill modules={modules} ref={quillRef} value={content} onChange={setContent}  className=" w-[60rem] h-[20rem] "/>
                         </div>
                        <div className="mt-16  mb-4">
                        <button className="h-[2rem] w-[8rem] bg-gray-500 hover:bg-gray-400 text-white font-mono  border-b-4

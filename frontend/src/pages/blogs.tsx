@@ -16,10 +16,10 @@ export function Blog(){
             )
           }
           
-          console.log('tanstack',data,isPending);   
+        //   console.log('tanstack',data,isPending);   
 
     return (
-        <div className="w-screen h-full bg-[#f7f6f1] ">  
+        <div className="w-screen h-full ">  
                   
                   <div className=" fixed top-0 left-0  w-full h-16 z-40 ">
                         <AppBar/>       

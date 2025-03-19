@@ -1,6 +1,10 @@
 /* File: src/app.css */
 
 /* Basic font families */
+body{
+  background-color:#fffefa;
+}
+
 .ql-font-serif {
     font-family: Georgia, Times, 'Times New Roman', serif !important;
   }

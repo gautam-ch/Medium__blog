@@ -24,7 +24,7 @@ export function BlogId(){
         }
     
     return (
-        <div className="bg-[#f5f4f0] h-full">
+        <div className=" h-full">
             <FullBlog title={data.title} content={data.content} name={data.author.name} publishedDate={data.createdAt} imageUrl={data.imageUrl} ></FullBlog>
         </div>
     )

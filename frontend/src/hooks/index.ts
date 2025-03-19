@@ -74,3 +74,84 @@ export function useBlogs(){
     )
 
 }
+
+
+export function usePosts(){
+
+  const navigate=useNavigate();
+
+     const query = useQuery({
+      queryKey:['myposts'],
+      queryFn:async()=>{
+                   
+                   try{
+                            const res = await axios.get(`${BACKEND_URL}/api/v1/post/myposts`,{
+                              headers:{
+                                Authorization:`Bearer ${localStorage.getItem('token')}`
+                              }
+                            });
+                            
+                            return res.data.posts;
+                         
+                   }
+                   catch(error:any){
+                            
+                           console.log({error:'error in fetching posts'},error);
+
+                           if(error.response.status==401){
+                                   navigate('/signin');
+                           }
+                    return null
+                   }
+      }
+     })
+
+     const {isPending,data}=query;
+
+     return{
+      isPending,
+      data
+     }
+
+}
+
+
+
+export function useDraft(){
+
+  const navigate=useNavigate();
+
+     const query = useQuery({
+      queryKey:['mydrafts'],
+      queryFn:async()=>{
+                   
+                   try{
+                            const res = await axios.get(`${BACKEND_URL}/api/v1/post/mydrafts`,{
+                              headers:{
+                                Authorization:`Bearer ${localStorage.getItem('token')}`
+                              }
+                            });
+                            
+                            return res.data.drafts;
+                         
+                   }
+                   catch(error:any){
+                            
+                           console.log({error:'error in fetching posts'},error);
+
+                           if(error.response.status==401){
+                                   navigate('/signin');
+                           }
+                    return null
+                   }
+      }
+     })
+
+     const {isPending,data}=query;
+
+     return{
+      isPending,
+      data
+     }
+
+}

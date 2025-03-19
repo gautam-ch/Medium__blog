@@ -33,7 +33,7 @@ export function AppBar(){
            navigate('/signin');
     }
     return (
-        <div className="flex justify-between px-20 border-b-4 border-blue-800 py-3 bg-[#f5f4f0]">
+        <div className="flex justify-between px-20 border-b-4 border-blue-800 py-3 bg-[#fffefa]">
                   
                   <div className="font-serif font-semibold text-4xl flex items-center">
                           Medium
