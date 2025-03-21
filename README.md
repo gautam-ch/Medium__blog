@@ -4,7 +4,7 @@
 
 Creating a blogging website using **serverless functions** with **Hono** as the backend framework. The backend is deployed on **Cloudflare Workers**, and the frontend is built with **React + TypeScript**.
 
-Check it out: [Live Demo](https://rishi-medium.vercel.app/signup)
+Check it out: [Live Demo](https://rishi-medium.vercel.app/blogs)
 
 ---
 
