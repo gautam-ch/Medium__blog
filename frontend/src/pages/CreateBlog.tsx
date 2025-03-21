@@ -12,14 +12,60 @@ import '../App.css';
 
 export function CreateBlog(){
     const location = useLocation();
-
+    const queryClient = useQueryClient();
+    const navigate=useNavigate();
       console.log('state prop: ',location?.state);
 
     const [title,setTitle] =     useState(location?.state?.title || "");
     const [content,setContent] = useState(location?.state?.content || "");
     const [image,setImage] =     useState<string | null>(location?.state?.imageUrl || null);
      
-    const queryClient = useQueryClient();
+    const handleDraft = async()=>{
+        
+                    if(location?.state){
+                      const id=location.state.blogId;
+                    try{ 
+                            const res = await axios.put(`${BACKEND_URL}/api/v1/post/blog?id=${id}`,{
+                                title,
+                                content,
+                                imageUrl:image,
+                                published:false
+                            },{
+                              headers:{
+                                Authorization:`Bearer ${localStorage.getItem('token')}`
+                              }
+                            }
+                          )
+                          // console.log(res.data);
+                          navigate(`/blog/${res.data.id}`);  
+                    }
+                    catch(err:any){
+                      console.log({error:'error in updating blog',details:err.message});
+                    }
+
+              } else{
+                          try{        
+                              const res = await axios.post(`${BACKEND_URL}/api/v1/post/saveDraft`,{
+                                    title,
+                                    content,
+                                    imageUrl:image,
+                              },{
+                                headers:{
+                                  Authorization:`Bearer ${localStorage.getItem('token')}`
+                                }
+                              })
+
+                              console.log('res');
+                              navigate(`/blog/${res.data.id}`);
+
+                              queryClient.invalidateQueries({queryKey:['mydrafts']});
+                          }
+                              catch(err:any){
+                              console.log({error:'error in drafting'},err.message);
+                            }
+              } 
+
+    }
 
       const mutation=useMutation({
           mutationFn:async()=>{
@@ -31,6 +77,7 @@ export function CreateBlog(){
                                   title,
                                   content,
                                   imageUrl:image,
+                                  published:true
                               },{
                                 headers:{
                                   Authorization:`Bearer ${localStorage.getItem('token')}`
@@ -76,7 +123,6 @@ export function CreateBlog(){
       })
 
     const  quillRef = useRef<ReactQuill | null>(null);  
-    const navigate=useNavigate();
 
     const  handleDynamicImage=async()=>{         
            const input =  document.createElement('input');
@@ -176,10 +222,15 @@ export function CreateBlog(){
                         <div className="mt-8 relative flex flex-col">
                                <ReactQuill modules={modules} ref={quillRef} value={content} onChange={setContent}  className=" w-[60rem] h-[20rem] "/>
                         </div>
-                       <div className="mt-16  mb-4">
+                       <div className="flex gap-8 mt-16  mb-4">
                        <button className="h-[2rem] w-[8rem] bg-gray-500 hover:bg-gray-400 text-white font-mono  border-b-4
                         border-gray-700 hover:border-gray-500 rounded" onClick={handlebutton}>
                               Publish post
+                       </button>
+
+                       <button className="h-[2rem] w-[8rem] bg-green-600 hover:bg-green-400 text-white font-mono  border-b-4
+                        border-gray-700 hover:border-gray-500 rounded" onClick={handleDraft}>
+                              Save Draft
                        </button>
                        </div>
                     

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { AppBar } from "../components/AppBar";
 import { PostCard } from "../components/PostCard";
 import { useDraft } from "../hooks"
+import { Spinner } from "../components/Spinner";
 
 
 export function Mydrafts(){     
@@ -10,24 +11,20 @@ export function Mydrafts(){
             if(isPending){
                 return (
                     <div>
-                        loading...
+                     <Spinner></Spinner>
                     </div>
                 )
             }
-            if(!data){
-                 return (
-                    <div>
-                        No Drafts
-                    </div>
-                 )
-            }
-            
+            // console.log('drafts',data);
     return (
         <>
         <div>
                <AppBar></AppBar>    
         </div>  
         <div className="flex  justify-center mt-12 mb-8">
+
+            {
+                 data.length>0?(
             <div className="grid grid-cols-1 sm:grid-cols-2   md:grid-cols-3 gap-12 ">
                 
                 {data.map((blog:any,index:number)=>(
@@ -40,7 +37,12 @@ export function Mydrafts(){
                 ))}
                 
                 
-            </div>
+            </div>):(
+                <div className="w-[80%] py-4 shadow-md bg-blue-300 font-bold text-3xl text-white flex justify-center mt-[6em]">
+                    No Drafts
+                </div>
+            )
+            }
        </div>  
 
     </>

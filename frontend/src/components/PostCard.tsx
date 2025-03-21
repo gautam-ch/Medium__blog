@@ -50,7 +50,7 @@ export function PostCard({imageUrl,title,createdAt,content,blogId,published}:Pro
                                      }
                               })
                               console.log('publish',res);
-                              queryClient.invalidateQueries({queryKey:['mydrafts','myposts','AllBlogs']});
+                              queryClient.refetchQueries({queryKey:['mydrafts','myposts','AllBlogs']});
                 }
                 catch(err:any){
                     console.log({msg:"Error in deleting blog"},err.message);

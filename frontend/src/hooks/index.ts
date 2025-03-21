@@ -123,6 +123,7 @@ export function useDraft(){
 
      const query = useQuery({
       queryKey:['mydrafts'],
+      staleTime: 0,
       queryFn:async()=>{
                    
                    try{

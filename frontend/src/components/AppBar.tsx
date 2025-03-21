@@ -35,9 +35,11 @@ export function AppBar(){
     return (
         <div className="flex justify-between px-20 border-b-4 border-blue-800 py-3 bg-[#fffefa]">
                   
-                  <div className="font-serif font-semibold text-4xl flex items-center">
+                  <Link to={'/blogs'}>
+                  <div className="font-serif font-semibold text-4xl flex items-center cursor-pointer ">
                           Medium
                   </div>
+                  </Link>
 
                   <div className="flex  items-center  gap-8">
                           <div className="font-serif text-slate-500 hover:text-black">

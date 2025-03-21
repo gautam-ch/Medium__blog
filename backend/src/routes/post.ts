@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { prisma } from '../middleware/prisma';
 import { PrismaClient } from '@prisma/client';
 import { auth } from '../middleware/auth';
-import { createBlog,updateBlog } from '@gautamrishi/medium-common';
+// import { createBlog,updateBlog } from '@gautamrishi/medium-common';
 
 const Blog = new Hono<{
     Bindings: {
@@ -137,7 +137,8 @@ Blog.post('/blog', auth, async (c) => {
                 title,
                 content,
                 imageUrl,
-                authorId: id
+                authorId: id,
+                published:true
             },
             select:{
                 id:true
@@ -152,6 +153,36 @@ Blog.post('/blog', auth, async (c) => {
         throw err;
     }
 
+})
+
+
+Blog.post('/saveDraft',auth,async(c)=>{
+      
+    try{
+           const prisma = c.get('prisma');
+           const id = c.get('userId');
+           
+           const body = await c.req.json();
+
+           const res = await prisma.post.create({
+                data:{
+                    title:body.title,
+                    imageUrl:body.imageUrl,
+                    content:body.content,
+                    authorId:id
+                },
+                select:{
+                    id:true
+                }
+           })
+           
+           console.log('draft succcessfully');
+           return c.json(res,200);
+
+    }
+    catch(err:any){
+         console.log({error:'error in saving blog'},err.message);
+    }
 })
 
 
@@ -254,7 +285,8 @@ Blog.put('/blog', auth, async (c) => {
             data: {
                 title: body.title,
                 content: body.content,
-                imageUrl:body.imageUrl
+                imageUrl:body.imageUrl,
+                published:body.published
             },
             select:{
                 id:true
