@@ -124,44 +124,6 @@ export function CreateBlog(){
 
     const  quillRef = useRef<ReactQuill | null>(null);  
 
-    const  handleDynamicImage=async()=>{         
-           const input =  document.createElement('input');
-           input.type='file';
-           input.accept='image/*';
-           input.click();
-
-           input.onchange=async()=>{
-                const file=input.files?.[0]
-                if(!file){
-                    return ;
-                }
-                 const data = new FormData();
-
-                 data.append('file',file);
-                 data.append('upload_preset','thechoicer');
-
-                 try{
-                    const res = await axios.post('https://api.cloudinary.com/v1_1/dvcaabqlm/image/upload',data);
-                    const imageUrl=res.data.secure_url;
-                    //  insert image at edior
-                    if(!quillRef.current){
-                        return ;
-                    }
-                    const  editor = quillRef.current.getEditor();
-        
-                    const cursor_position=editor.getSelection()?.index ?? 0;
-                    if(!cursor_position){
-                        return;
-                    }
-                    editor.insertEmbed(cursor_position,'image',imageUrl);    
-              }
-              catch(error:any){
-                   console.log({error:"error while adding image in quill"},error.message);
-              }
-           }
-    }
-
-    
     const  handlebutton=async(event:React.MouseEvent<HTMLButtonElement>)=>{
                 event.preventDefault();
                    mutation.mutate();
